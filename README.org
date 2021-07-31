@@ -1,6 +1,6 @@
 #+TITLE: tubestatus.el
 
-London Tube live service status from Emacs using the TFL API.
+London Tube live service status from Emacs using the TfL API.
 
 * Installation
 
@@ -25,6 +25,11 @@ Add the following to your =packages.el= file:
   (:host github
    :repo "smallwat3r/tubestatus.el"))
 #+end_src
+
+
+* Usage
+
+Run =M-x tubestatus= and chose a Tube line from the list. It will open a new buffer showing the current service status of the given line.
 
 
 * Screenshots
