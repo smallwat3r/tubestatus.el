@@ -3,7 +3,9 @@
 ;; Copyright (C) 2021 Matthieu Petiteau
 
 ;; Author: Matthieu Petiteau <matt@smallwat3r.com>
-;; Keywords: Tube, London, TfL, subway, underground, transport
+;; URL: https://github.com/smallwat3r/tubestatus.el
+;; Package-Requires: ((emacs "26.1"))
+;; Version: 0.0.1
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -21,9 +23,9 @@
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; This module allows you to get the live service status of the London
+;; This package allows you to get the live service status of the London
 ;; Tube using the TfL API (https://api.tfl.gov.uk).
-;;
+
 ;;; Code:
 
 (require 'cl-lib)
@@ -50,29 +52,29 @@
   "List of TfL Tube lines.")
 
 (defface tubestatus-good-service-face
-  '((t :foreground "green"))
+  '((t :foreground "LimeGreen"))
   "The tubestatus face used when there is a good service on a line."
-  :group 'tubestatus)
+  :group 'tubestatus-faces)
 
 (defface tubestatus-minor-delay-face
-  '((t :foreground "yellow"))
+  '((t :foreground "gold"))
   "The tubestatus face used when there is minor delays on a line."
-  :group 'tubestatus)
+  :group 'tubestatus-faces)
 
 (defface tubestatus-major-delay-face
-  '((t :foreground "red"))
+  '((t :foreground "OrangeRed"))
   "The tubestatus face used when there is major delays on a line."
-  :group 'tubestatus)
+  :group 'tubestatus-faces)
 
 (defface tubestatus-line-closed-face
-  '((t :foreground "grey"))
+  '((t :foreground "SlateGrey"))
   "The tubestatus face used when a line is closed."
-  :group 'tubestatus)
+  :group 'tubestatus-faces)
 
 (defface tubestatus-special-service-face
-  '((t :foreground "blue"))
+  '((t :foreground "DodgerBlue"))
   "The tubestatus face used when a line runs with a special service."
-  :group 'tubestatus)
+  :group 'tubestatus-faces)
 
 (defun tubestatus--render (buffer data)
   "Render DATA in the tubestatus BUFFER."
@@ -83,17 +85,16 @@
          (status-content (elt (assoc-default 'lineStatuses content) 0))
          (reason (assoc-default 'reason status-content))
          (sev (assoc-default 'statusSeverity status-content)))
-    (insert
-     (concat
-      (format "*%s* (Last update: %s)\n\nStatus:\n    "
-              (assoc-default 'name content) (assoc-default 'modified content))
-      (cond ((eql sev 10) (propertize "●" 'face 'tubestatus-good-service-face))
-            ((eql sev 20) (propertize "●" 'face 'tubestatus-line-closed-face))
-            ((eql sev 0)  (propertize "●" 'face 'tubestatus-special-service-face))
-            ((>=  sev 8)  (propertize "●" 'face 'tubestatus-minor-delay-face))
-            (t            (propertize "●" 'face 'tubestatus-major-delay-face)))
-      (format " %s" (assoc-default 'statusSeverityDescription status-content))
-      (if reason (format "\n\nDetails:\n    %s" reason)))))
+    (insert (concat
+             (format "*%s* (Last update: %s)\n\nStatus:\n    "
+                     (assoc-default 'name content) (assoc-default 'modified content))
+             (cond ((eql sev 10) (propertize "●" 'face 'tubestatus-good-service-face))
+                   ((eql sev 20) (propertize "●" 'face 'tubestatus-line-closed-face))
+                   ((eql sev 0)  (propertize "●" 'face 'tubestatus-special-service-face))
+                   ((>=  sev 8)  (propertize "●" 'face 'tubestatus-minor-delay-face))
+                   (t            (propertize "●" 'face 'tubestatus-major-delay-face)))
+             (format " %s" (assoc-default 'statusSeverityDescription status-content))
+             (if reason (format "\n\nDetails:\n    %s" reason)))))
   (goto-char (point-min))
   (setq buffer-read-only t))
 
