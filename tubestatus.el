@@ -110,6 +110,7 @@
     (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
                    (message "An unexpected error has occurred: %s" error-thrown)))))
 
+;;;###autoload
 (defun tubestatus ()
   "Get the current live status of a London tube line."
   (interactive)
