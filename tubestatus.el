@@ -4,7 +4,7 @@
 
 ;; Author: Matthieu Petiteau <matt@smallwat3r.com>
 ;; URL: https://github.com/smallwat3r/tubestatus.el
-;; Package-Requires: ((emacs "26.1"))
+;; Package-Requires: ((emacs "26.1") (request "0.3.2"))
 ;; Version: 0.0.1
 
 ;; This file is NOT part of GNU Emacs.
