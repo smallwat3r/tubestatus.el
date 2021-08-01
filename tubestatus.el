@@ -35,21 +35,21 @@
   "TfL line status API endpoint.")
 
 (defvar tubestatus-tfl-lines
-  '(("Bakerloo" . "bakerloo")
-    ("Central" . "central")
-    ("Circle" . "circle")
-    ("District" . "district")
-    ("DLR" . "dlr")
+  '(("Bakerloo"             . "bakerloo")
+    ("Central"              . "central")
+    ("Circle"               . "circle")
+    ("District"             . "district")
+    ("DLR"                  . "dlr")
     ("Hammersmith and City" . "hammersmith-city")
-    ("Jubilee" . "jubilee")
-    ("Overground" . "london-overground")
-    ("Metropolitan" . "metropolitan")
-    ("Nothern" . "northern")
-    ("Picadilly" . "piccadilly")
-    ("TFL rail" . "tfl-rail")
-    ("Victoria" . "victoria")
-    ("Waterloo and City" . "waterloo-city"))
-  "List of TfL Tube lines.")
+    ("Jubilee"              . "jubilee")
+    ("Overground"           . "london-overground")
+    ("Metropolitan"         . "metropolitan")
+    ("Nothern"              . "northern")
+    ("Picadilly"            . "piccadilly")
+    ("TfL rail"             . "tfl-rail")
+    ("Victoria"             . "victoria")
+    ("Waterloo and City"    . "waterloo-city"))
+  "Association list of TfL Tube lines.")
 
 (defface tubestatus-good-service-face
   '((t :foreground "LimeGreen"))
@@ -94,22 +94,25 @@
                    ((>=  sev 8)  (propertize "●" 'face 'tubestatus-minor-delay-face))
                    (t            (propertize "●" 'face 'tubestatus-major-delay-face)))
              (format " %s" (assoc-default 'statusSeverityDescription status-content))
-             (if reason (format "\n\nDetails:\n    %s" reason)))))
+             (if reason
+                 (format "\n\nDetails:\n    %s" reason)))))
   (goto-char (point-min))
   (setq buffer-read-only t))
 
 (defun tubestatus--query (line)
   "Get data from the TfL API for a specific LINE."
   (request (format tubestatus-tfl-api-url line)
-    :parser 'json-read
-    :success
-    (cl-function
-     (lambda (&key data &allow-other-keys)
-       (let ((buffer (get-buffer-create "*tubestatus*")))
-         (tubestatus--render data buffer))))
-    :error
-    (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
-                   (message "An error has occurred while reaching the TfL API: %s" error-thrown)))))
+           :parser 'json-read
+           :success
+           (cl-function
+            (lambda (&key data &allow-other-keys)
+              (let ((buffer (get-buffer-create "*tubestatus*")))
+                (tubestatus--render data buffer))))
+           :error
+           (cl-function
+            (lambda (&rest args &key error-thrown &allow-other-keys)
+              (message "An error has occurred while reaching the TfL API: %s"
+                       error-thrown)))))
 
 ;;;###autoload
 (defun tubestatus ()
