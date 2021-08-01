@@ -29,7 +29,7 @@ Add the following to your =packages.el= file:
 
 * Usage
 
-Run =M-x tubestatus= and chose a Tube line from the list. It will open a new buffer showing the current service status of the given line.
+Run =M-x tubestatus= and select a line from the list. It will open a new buffer showing the current service status of the given line.
 
 
 * Screenshots
