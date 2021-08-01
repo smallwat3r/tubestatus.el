@@ -32,7 +32,7 @@
 (require 'request)
 
 (defvar tubestatus-tfl-api-url "https://api.tfl.gov.uk/line/%s/status"
-  "Tfl line status API endpoint.")
+  "TfL line status API endpoint.")
 
 (defvar tubestatus-tfl-lines
   '(("Bakerloo" . "bakerloo")
@@ -76,7 +76,7 @@
   "The tubestatus face used when a line runs with a special service."
   :group 'tubestatus-faces)
 
-(defun tubestatus--render (buffer data)
+(defun tubestatus--render (data buffer)
   "Render DATA in the tubestatus BUFFER."
   (switch-to-buffer-other-window buffer)
   (setq buffer-read-only nil)
@@ -105,15 +105,15 @@
     :success
     (cl-function
      (lambda (&key data &allow-other-keys)
-       (let ((buffer  (get-buffer-create "*tubestatus*")))
-         (tubestatus--render buffer data))))
+       (let ((buffer (get-buffer-create "*tubestatus*")))
+         (tubestatus--render data buffer))))
     :error
     (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
-                   (message "An unexpected error has occurred: %s" error-thrown)))))
+                   (message "An error has occurred while reaching the TfL API: %s" error-thrown)))))
 
 ;;;###autoload
 (defun tubestatus ()
-  "Get the current live status of a London tube line."
+  "Get the current service status of a London Tube line."
   (interactive)
   (tubestatus--query
    (cdr (assoc (completing-read "Select a line: " tubestatus-tfl-lines)
