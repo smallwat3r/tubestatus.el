@@ -1,10 +1,17 @@
-#+TITLE: tubestatus.el
+[[https://melpa.org/#/tubestatus][file:https://melpa.org/packages/tubestatus-badge.svg]]
+
+* tubestatus.el
 
 London Tube live service status from Emacs using the TfL API.
 
-* Installation
 
-** Manual
+** Installation
+
+*** Melpa
+
+A melpa [[https://melpa.org/#/tubestatus][package]] is available for tubestatus.
+
+*** Manual
 
 Clone the repository:
 #+begin_src shell
@@ -17,22 +24,13 @@ And add the =tubestatus.el= directory to your =load-path=:
 (require 'tubestatus)
 #+end_src
 
-** Doom Emacs
 
-Add the following to your =packages.el= file:
-#+begin_src elisp
-(package! tubestatus :recipe
-  (:host github
-   :repo "smallwat3r/tubestatus.el"))
-#+end_src
-
-
-* Usage
+** Usage
 
 Run =M-x tubestatus= and select a line from the list. It will open a new buffer showing the current service status of the given line.
 
 
-* Screenshots
+** Screenshots
 
 [[./images/img1.png]]
 [[./images/img2.png]]
