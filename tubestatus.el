@@ -86,8 +86,7 @@
          (reason (assoc-default 'reason status-content))
          (sev (assoc-default 'statusSeverity status-content)))
     (insert (concat
-             (format "*%s* (Last update: %s)\n\nStatus:\n    "
-                     (assoc-default 'name content) (assoc-default 'modified content))
+             (format "*%s*\n\nStatus:\n    " (assoc-default 'name content))
              (cond ((eql sev 10) (propertize "●" 'face 'tubestatus-good-service-face))
                    ((eql sev 20) (propertize "●" 'face 'tubestatus-line-closed-face))
                    ((eql sev 0)  (propertize "●" 'face 'tubestatus-special-service-face))
