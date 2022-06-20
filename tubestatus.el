@@ -46,7 +46,6 @@
     ("Metropolitan"         . "metropolitan")
     ("Nothern"              . "northern")
     ("Picadilly"            . "piccadilly")
-    ("TfL rail"             . "tfl-rail")
     ("Victoria"             . "victoria")
     ("Waterloo and City"    . "waterloo-city"))
   "Association list of TfL Tube lines.")
