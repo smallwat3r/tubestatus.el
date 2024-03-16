@@ -32,5 +32,4 @@ Run =M-x tubestatus= and select a line from the list. It will open a new buffer 
 
 ** Screenshots
 
-[[./images/img1.png]]
-[[./images/img2.png]]
+[[./images/tubestatus.png]]
