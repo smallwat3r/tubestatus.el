@@ -40,6 +40,7 @@
     ("Circle"               . "circle")
     ("District"             . "district")
     ("DLR"                  . "dlr")
+    ("Elizabeth Line"       . "mode/elizabeth-line")
     ("Hammersmith and City" . "hammersmith-city")
     ("Jubilee"              . "jubilee")
     ("Overground"           . "london-overground")
