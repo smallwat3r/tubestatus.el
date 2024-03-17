@@ -87,11 +87,11 @@
          (sev (assoc-default 'statusSeverity status-content)))
     (insert (concat
              (format "*%s*\n\nStatus:\n    " (assoc-default 'name content))
-             (cond ((eql sev 10) (propertize "●" 'face 'tubestatus-good-service-face))
-                   ((eql sev 20) (propertize "●" 'face 'tubestatus-line-closed-face))
-                   ((eql sev 0)  (propertize "●" 'face 'tubestatus-special-service-face))
-                   ((>=  sev 8)  (propertize "●" 'face 'tubestatus-minor-delay-face))
-                   (t            (propertize "●" 'face 'tubestatus-major-delay-face)))
+             (cond ((eql sev 10) (propertize "\u2022" 'face 'tubestatus-good-service-face))
+                   ((eql sev 20) (propertize "\u2022" 'face 'tubestatus-line-closed-face))
+                   ((eql sev 0)  (propertize "\u2022" 'face 'tubestatus-special-service-face))
+                   ((>=  sev 8)  (propertize "\u2022" 'face 'tubestatus-minor-delay-face))
+                   (t            (propertize "\u2022" 'face 'tubestatus-major-delay-face)))
              (format " %s" (assoc-default 'statusSeverityDescription status-content))
              (if reason
                  (format "\n\nDetails:\n    %s" reason)))))
