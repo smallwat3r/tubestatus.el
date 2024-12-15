@@ -52,7 +52,7 @@
     ("Suffragette"          . "suffragette")
     ("Victoria"             . "victoria")
     ("Waterloo and City"    . "waterloo-city")
-    ("Weaver"               . "weather")
+    ("Weaver"               . "weaver")
     ("Windrush"             . "windrush"))
   "Association list of TfL Tube lines.")
 
