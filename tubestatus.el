@@ -5,7 +5,7 @@
 ;; Author: Matthieu Petiteau <matt@smallwat3r.com>
 ;; URL: https://github.com/smallwat3r/tubestatus.el
 ;; Package-Requires: ((emacs "26.1") (request "0.3.2"))
-;; Version: 0.0.1
+;; Version: 0.0.2
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -41,14 +41,19 @@
     ("District"             . "district")
     ("DLR"                  . "dlr")
     ("Elizabeth Line"       . "mode/elizabeth-line")
+    ("Liberty"              . "liberty")
+    ("Lioness"              . "lioness")
     ("Hammersmith and City" . "hammersmith-city")
     ("Jubilee"              . "jubilee")
-    ("Overground"           . "london-overground")
     ("Metropolitan"         . "metropolitan")
+    ("Mildmay"              . "mildmay")
     ("Nothern"              . "northern")
     ("Picadilly"            . "piccadilly")
+    ("Suffragette"          . "suffragette")
     ("Victoria"             . "victoria")
-    ("Waterloo and City"    . "waterloo-city"))
+    ("Waterloo and City"    . "waterloo-city")
+    ("Weaver"               . "weather")
+    ("Windrush"             . "windrush"))
   "Association list of TfL Tube lines.")
 
 (defface tubestatus-good-service-face
