@@ -5,7 +5,7 @@
 ;; Author: Matthieu Petiteau <matt@smallwat3r.com>
 ;; URL: https://github.com/smallwat3r/tubestatus.el
 ;; Package-Requires: ((emacs "26.1") (request "0.3.2"))
-;; Version: 0.0.2
+;; Version: 0.0.3
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -47,8 +47,8 @@
     ("Jubilee"              . "jubilee")
     ("Metropolitan"         . "metropolitan")
     ("Mildmay"              . "mildmay")
-    ("Nothern"              . "northern")
-    ("Picadilly"            . "piccadilly")
+    ("Northern"             . "northern")
+    ("Piccadilly"           . "piccadilly")
     ("Suffragette"          . "suffragette")
     ("Victoria"             . "victoria")
     ("Waterloo and City"    . "waterloo-city")
@@ -63,12 +63,12 @@
 
 (defface tubestatus-minor-delay-face
   '((t :foreground "gold"))
-  "The tubestatus face used when there is minor delays on a line."
+  "The tubestatus face used when there are minor delays on a line."
   :group 'tubestatus-faces)
 
 (defface tubestatus-major-delay-face
   '((t :foreground "OrangeRed"))
-  "The tubestatus face used when there is major delays on a line."
+  "The tubestatus face used when there are major delays on a line."
   :group 'tubestatus-faces)
 
 (defface tubestatus-line-closed-face
@@ -81,6 +81,27 @@
   "The tubestatus face used when a line runs with a special service."
   :group 'tubestatus-faces)
 
+(defun tubestatus--get-face-for-status (severity)
+  "Return the appropriate face for the given status SEVERITY."
+  (cond ((eql severity 10) 'tubestatus-good-service-face)
+        ((eql severity 20) 'tubestatus-line-closed-face)
+        ((eql severity 0)  'tubestatus-special-service-face)
+        ((>= severity 8)   'tubestatus-minor-delay-face)
+        (t                 'tubestatus-major-delay-face)))
+
+(defun tubestatus--render-status (line-name status-content)
+  "Render the status for a specific LINE-NAME using the given STATUS-CONTENT."
+  (let* ((sev (assoc-default 'statusSeverity status-content))
+         (reason (assoc-default 'reason status-content))
+         (severity-face (tubestatus--get-face-for-status sev))
+         (dot "\u2022")
+         (status-description (assoc-default 'statusSeverityDescription status-content)))
+    (insert (format "*%s*\n\nStatus:\n    " line-name)
+            (propertize dot 'face severity-face)
+            (format " %s" status-description)
+            (if reason
+                (format "\n\nDetails:\n    %s" reason)))))
+
 (defun tubestatus--render (data buffer)
   "Render DATA in the tubestatus BUFFER."
   (switch-to-buffer-other-window buffer)
@@ -88,19 +109,8 @@
   (erase-buffer)
   (let* ((content (elt data 0))
          (status-content (elt (assoc-default 'lineStatuses content) 0))
-         (reason (assoc-default 'reason status-content))
-         (sev (assoc-default 'statusSeverity status-content))
-         (dot "\u2022"))
-    (insert (concat
-             (format "*%s*\n\nStatus:\n    " (assoc-default 'name content))
-             (cond ((eql sev 10) (propertize dot 'face 'tubestatus-good-service-face))
-                   ((eql sev 20) (propertize dot 'face 'tubestatus-line-closed-face))
-                   ((eql sev 0)  (propertize dot 'face 'tubestatus-special-service-face))
-                   ((>=  sev 8)  (propertize dot 'face 'tubestatus-minor-delay-face))
-                   (t            (propertize dot 'face 'tubestatus-major-delay-face)))
-             (format " %s" (assoc-default 'statusSeverityDescription status-content))
-             (if reason
-                 (format "\n\nDetails:\n    %s" reason)))))
+         (line-name (assoc-default 'name content)))
+    (tubestatus--render-status line-name status-content))
   (goto-char (point-min))
   (setq buffer-read-only t))
 
@@ -116,8 +126,7 @@
            :error
            (cl-function
             (lambda (&rest args &key error-thrown &allow-other-keys)
-              (message "An error has occurred while reaching the TfL API: %s"
-                       error-thrown)))))
+              (message "Error querying the TfL API: %s" error-thrown)))))
 
 ;;;###autoload
 (defun tubestatus ()
