@@ -92,27 +92,28 @@
 (defun tubestatus--render-status (line-name status-content)
   "Render the status for a specific LINE-NAME using the given STATUS-CONTENT."
   (let* ((sev (assoc-default 'statusSeverity status-content))
-         (reason (assoc-default 'reason status-content))
+         (reason (or (assoc-default 'reason status-content) "No details available"))
          (severity-face (tubestatus--get-face-for-status sev))
          (dot "\u2022")
-         (status-description (assoc-default 'statusSeverityDescription status-content)))
+         (status-description (or (assoc-default 'statusSeverityDescription status-content)
+                                  "Unknown status")))
     (insert (format "*%s*\n\nStatus:\n    " line-name)
             (propertize dot 'face severity-face)
             (format " %s" status-description)
-            (if reason
-                (format "\n\nDetails:\n    %s" reason)))))
+            (format "\n\nDetails:\n    %s" reason))))
 
 (defun tubestatus--render (data buffer)
   "Render DATA in the tubestatus BUFFER."
-  (switch-to-buffer-other-window buffer)
-  (setq buffer-read-only nil)
-  (erase-buffer)
-  (let* ((content (elt data 0))
-         (status-content (elt (assoc-default 'lineStatuses content) 0))
-         (line-name (assoc-default 'name content)))
-    (tubestatus--render-status line-name status-content))
-  (goto-char (point-min))
-  (setq buffer-read-only t))
+  (with-current-buffer (get-buffer-create buffer)
+    (let ((inhibit-read-only t))
+      (erase-buffer)
+      (let* ((content (elt data 0))
+             (status-content (elt (assoc-default 'lineStatuses content) 0))
+             (line-name (assoc-default 'name content)))
+        (tubestatus--render-status line-name status-content))
+      (goto-char (point-min))
+      (setq buffer-read-only t)))
+  (switch-to-buffer-other-window buffer))
 
 (defun tubestatus--query (line)
   "Get data from the TfL API for a specific LINE."
@@ -121,8 +122,7 @@
            :success
            (cl-function
             (lambda (&key data &allow-other-keys)
-              (let ((buffer (get-buffer-create "*tubestatus*")))
-                (tubestatus--render data buffer))))
+              (tubestatus--render data "*tubestatus*")))
            :error
            (cl-function
             (lambda (&rest args &key error-thrown &allow-other-keys)
